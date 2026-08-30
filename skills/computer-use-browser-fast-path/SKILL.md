@@ -36,6 +36,10 @@ When a browser workflow has already been mapped and will be repeated, use the co
 
 Keep bursts short when the site is dynamic. A burst ends before any branch, uncertain control, external mutation requiring confirmation, or action whose success affects the next target.
 
+Before a keyboard-heavy burst, make sure the target browser is still the frontmost app. A notification or another app taking focus invalidates the burst even when the browser page itself has not changed. Re-read the browser state and refocus it before continuing.
+
+Treat the system clipboard as a shared, asynchronous resource. Do not queue several `paste` calls in one compiled burst. Paste one field, read the resulting state, then continue; use `type_text` for short deterministic strings when that avoids clipboard contention.
+
 ## Repeated workflows
 
 Run the first item as calibration and record its stable route, required fields, boundaries, and final evidence. For later items, reuse that route but refresh state-derived indices after each boundary. Verify each item before advancing, and retain a checkpoint that prevents duplicate submission after interruption.
@@ -47,6 +51,8 @@ If two consecutive items diverge at the same boundary, leave fast mode and re-ma
 ## Recovery
 
 On an unexpected state, stop the burst and request one fresh full state. If accessibility text still cannot explain the page, inspect the screenshot once. Retry only after identifying the cause and a changed action. Never repeat clicks, uploads, or submissions merely because the expected result is not yet visible.
+
+If page scrolling moves only an inner editor or list, move focus to a known blank page region before scrolling again. Do not increase the scroll distance while the wrong container still owns focus.
 
 ## Completion
 

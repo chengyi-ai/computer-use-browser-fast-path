@@ -110,7 +110,7 @@ class UpdateCheckTests(unittest.TestCase):
                 env=environment,
             )
         self.assertIn("发现 Skill 新版本 v9.9.9", proc.stdout)
-        self.assertIn("当前 v1.1.0", proc.stdout)
+        self.assertIn("当前 v1.1.1", proc.stdout)
 
 
 if __name__ == "__main__":

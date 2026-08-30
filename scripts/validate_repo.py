@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NAME = "computer-use-browser-fast-path"
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 SKILL_DIR = ROOT / "skills" / NAME
 SKILL_FILE = SKILL_DIR / "SKILL.md"
 OPENAI_YAML = SKILL_DIR / "agents" / "openai.yaml"
