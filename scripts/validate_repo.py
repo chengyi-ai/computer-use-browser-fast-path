@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 NAME = "computer-use-browser-fast-path"
-VERSION = "1.0.1"
+VERSION = "1.1.0"
 SKILL_DIR = ROOT / "skills" / NAME
 SKILL_FILE = SKILL_DIR / "SKILL.md"
 OPENAI_YAML = SKILL_DIR / "agents" / "openai.yaml"
@@ -29,6 +29,7 @@ def main():
         UPDATE_SCRIPT,
         SKILL_DIR / "references" / "fast-path-playbook.md",
         SKILL_DIR / "references" / "benchmark.md",
+        SKILL_DIR / "references" / "douyin-image-post-prepublish.md",
         ROOT / "tests" / "test_check_update.py",
     ]
     for path in required:
@@ -56,6 +57,7 @@ def main():
     for reference in (
         "references/fast-path-playbook.md",
         "references/benchmark.md",
+        "references/douyin-image-post-prepublish.md",
     ):
         if reference not in skill_text:
             errors.append(f"SKILL.md 未链接参考文件: {reference}")

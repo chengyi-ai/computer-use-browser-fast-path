@@ -85,3 +85,62 @@ nodeRepl.write(browserState.text);
 第二步仍不明确：查看当前截图，定位遮挡、弹窗、加载或布局变化。
 
 只有原因明确且下一步不同于失败动作时才重试。若同一边界连续两次失败，退出快速路径并重新映射当前页面；不要继续盲点。
+
+## 7. 把稳定内循环编译到一次 `node_repl` 调用
+
+已经跑通的重复步骤可以保留必要的 UI 状态读取，同时减少模型与工具之间的往返。做法是把一个无语义分支的内循环写成持久 `node_repl` 函数：每个动作边界仍调用 `get_app_state`，但在同一次 JavaScript 执行里从最新可访问性文本解析下一个控件索引。
+
+```js
+function findIndex(text, label) {
+  for (const line of text.split("\n")) {
+    if (!line.includes(label)) continue;
+    const match = line.match(/(?:^|\t)(\d+)\s+/);
+    if (match) return Number(match[1]);
+  }
+  return null;
+}
+
+async function runStableStep(startIndex, value) {
+  await sky.click({ app: browserApp, element_index: startIndex });
+  await sky.get_app_state({ app: browserApp });
+  await sky.paste({ app: browserApp, text: value, format: "text" });
+  const state = await sky.get_app_state({ app: browserApp });
+  const nextIndex = findIndex(state.text, "下一步的稳定标签");
+  if (nextIndex == null) throw new Error("稳定路径失效，退出快速模式");
+  return { state, nextIndex };
+}
+```
+
+只编译满足这些条件的区间：
+
+- 输入、目标控件和成功条件都已由黄金路径验证；
+- 中间页面不会要求用户判断、授权或选择不确定候选；
+- 每次页面变化后都从新状态计算索引；
+- 找不到控件或断言不成立时立即抛错并退出，不提供兜底坐标乱点；
+- 提交、发布、删除、购买等后果动作仍停在确认边界之外。
+
+区分两个指标：`state_reads` 是 Computer Use 对界面的必要观察次数；`model_round_trips` 是模型与工具之间的往返次数。编译式重放主要减少后者，不应为了压低前者而跨过动态状态。
+
+## 8. 富文本与结构化实体
+
+标签、话题、提及、商品卡等通常不是普通文本。若平台要求从候选面板激活，粘贴可见的 `#标签` 不等于创建结构化实体。
+
+- 在创建任何结构化实体之前，一次性写入完整正文并核对末句；不要在实体创建后继续做长正文的光标手术。
+- 空编辑器优先一次 `set_value` 写入正文。若编辑器已有 Slate 等富文本节点，先清空、重新读取状态，再写入正文。
+- `select_text`、`End` 或坐标在长富文本里无法稳定落点时，不要补丁式修复；重置正文并重放结构化实体通常更快、更可靠。
+- 每个实体都从平台候选中确认，并在最终预览或可访问性结构中核对数量和文本。
+
+## 9. macOS 文件选择器快路径
+
+本地准备可以使用文件或 shell 工具，但不能借此控制浏览器。遇到中文或很长的本地路径时，可在定时段开始前创建指向素材目录的临时 ASCII 路径；不要改名或移动源文件。
+
+推荐顺序：
+
+1. 点击上传并进入文件选择器；
+2. 用“前往文件夹”打开临时 ASCII 路径；
+3. 切换列表视图，聚焦第一项；
+4. 对连续文件使用 `Shift+Down` 批量选择；
+5. 点击“打开”，随后在网页状态中核对实际上传数量；
+6. 上传完成后清理临时路径。
+
+若文件选择器不能可靠接收粘贴，ASCII 路径可用 `type_text`；中文路径不要依赖逐字模拟。前往文件夹不可用时，再退回列表视图和可访问性“打开项目”动作逐级导航。

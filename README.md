@@ -15,6 +15,7 @@
 - 只在导航、弹窗、提交、上传完成等“状态边界”重新读取页面；
 - 不添加固定 `sleep`，让 Computer Use 自带的界面等待机制处理普通加载；
 - 批量工作先跑通一条“黄金路径”，后续条目复用路径但始终刷新元素索引；
+- 对已经跑通的稳定内循环，把“动作 → 状态读取 → 新索引解析”编译到一次持久 `node_repl` 调用中，减少模型往返而不省略界面核验；
 - 出错时先读取一次全量状态，再按需查看截图，不连续盲点或重复提交。
 
 ## 安全边界
@@ -74,6 +75,8 @@ cp -R computer-use-browser-fast-path/skills/computer-use-browser-fast-path ~/.co
 ## 如何判断真的变快
 
 不要只看鼠标移动快不快。应同时记录总耗时、状态读取次数、截图展开次数、重复动作和最终是否正确。详见 [测速协议](skills/computer-use-browser-fast-path/references/benchmark.md)。
+
+仓库还包含一个真实跑通、停在发布按钮之前的 [抖音图文发布前案例](skills/computer-use-browser-fast-path/references/douyin-image-post-prepublish.md)，用于说明文件选择器、Slate 富文本和结构化话题的编译式重放方式。
 
 ## 更新策略
 

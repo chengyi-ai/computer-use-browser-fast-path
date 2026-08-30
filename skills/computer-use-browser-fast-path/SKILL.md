@@ -22,6 +22,8 @@ Before touching the UI, resolve the target browser, starting page, exact inputs,
 
 For the concrete `node_repl` and `@oai/sky` fast path, read [references/fast-path-playbook.md](references/fast-path-playbook.md).
 
+When a browser workflow has already been mapped and will be repeated, use the compiled replay mode in that playbook: keep required UI state reads inside one persistent `node_repl` call, derive the next accessibility index from the newest state, and return to the model only at a branch or validation boundary. For the verified Douyin image-post example, read [references/douyin-image-post-prepublish.md](references/douyin-image-post-prepublish.md).
+
 ## Fast-path loop
 
 1. Initialize the Computer Use runtime once, target the known browser directly, and keep the session persistent.
@@ -37,6 +39,8 @@ Keep bursts short when the site is dynamic. A burst ends before any branch, unce
 ## Repeated workflows
 
 Run the first item as calibration and record its stable route, required fields, boundaries, and final evidence. For later items, reuse that route but refresh state-derived indices after each boundary. Verify each item before advancing, and retain a checkpoint that prevents duplicate submission after interruption.
+
+For a stable inner loop, compile the action-state sequence into one `node_repl` function. Internal state reads are still required; the optimization is fewer model-to-tool round trips, not less observation. The function must stop on a missing control or failed invariant instead of guessing. Keep navigation, uploads, permission prompts, and final submission outside the compiled loop unless their next state is deterministic and separately verified.
 
 If two consecutive items diverge at the same boundary, leave fast mode and re-map the live workflow instead of accumulating retries.
 

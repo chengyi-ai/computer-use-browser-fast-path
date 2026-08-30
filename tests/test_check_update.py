@@ -58,14 +58,14 @@ class UpdateCheckTests(unittest.TestCase):
                 now=self.now,
                 cache_path=cache,
                 fetcher=lambda: {
-                    "latest_version": "1.1.0",
-                    "release_url": "https://example.test/v1.1.0",
+                    "latest_version": "1.2.0",
+                    "release_url": "https://example.test/v1.2.0",
                 },
             )
             saved = json.loads(cache.read_text(encoding="utf-8"))
         self.assertEqual(result["status"], "update_available")
         self.assertFalse(result["from_cache"])
-        self.assertEqual(saved["latest_version"], "1.1.0")
+        self.assertEqual(saved["latest_version"], "1.2.0")
 
     def test_network_failure_is_non_blocking(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -110,7 +110,7 @@ class UpdateCheckTests(unittest.TestCase):
                 env=environment,
             )
         self.assertIn("发现 Skill 新版本 v9.9.9", proc.stdout)
-        self.assertIn("当前 v1.0.1", proc.stdout)
+        self.assertIn("当前 v1.1.0", proc.stdout)
 
 
 if __name__ == "__main__":
