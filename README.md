@@ -40,6 +40,8 @@ skills/computer-use-browser-fast-path/
 └── scripts/check_update.py
 ```
 
+其余文件只用于维护，不属于 Skill：`CLAUDE.md`（给 Agent 的项目约定）、`scripts/validate_repo.py`（仓库检查）、`tools/`（登记反馈）、`tests/`、`docs/`、`.github/`（CI 与反馈处理工作流）。
+
 ## 安装
 
 ### Codex Skill Installer
@@ -81,6 +83,12 @@ cp -R computer-use-browser-fast-path/skills/computer-use-browser-fast-path ~/.co
 ## 更新策略
 
 Skill 最多每 24 小时检查一次 GitHub Latest Release。它只提示新版本，不会自动覆盖本地文件；断网或 GitHub 不可用时会静默继续当前任务。
+
+## 反馈
+
+遇到快速路径出错、变慢，或有新的提速思路，直接[提 issue](https://github.com/chengyi-ai/computer-use-browser-fast-path/issues/new/choose)。请写清浏览器、所用 Agent 和出错的步骤，**不要贴密码、Cookie、令牌等账号信息**，截图先打码。
+
+提交后 Agent 会自动读代码评估可行性，在 issue 下回复结论和实现思路；维护者确认后由 Agent 改文档或代码、跑测试、提 PR，合并前一定有人审。绕过登录、验证码、风控或跳过确认的需求不会被采纳。社媒、群聊里的反馈也能登记进来，整套流程和配置见 [docs/agent-workflow.md](docs/agent-workflow.md)。
 
 ## License
 

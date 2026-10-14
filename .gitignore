@@ -3,3 +3,7 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .coverage
+.venv/
+venv/
+.agent-in/
+.agent-out/

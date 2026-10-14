@@ -48,6 +48,12 @@ See the [benchmark protocol](skills/computer-use-browser-fast-path/references/be
 
 The repository also includes a real [Douyin image-post pre-publish case study](skills/computer-use-browser-fast-path/references/douyin-image-post-prepublish.md) covering macOS file selection, Slate rich text, and structured-topic replay without clicking Publish.
 
+## Feedback
+
+If the fast path fails, slows down, or you have an idea for a faster workflow, [open an issue](https://github.com/chengyi-ai/computer-use-browser-fast-path/issues/new/choose). Include the browser, the agent you used, and the step that went wrong. **Do not paste passwords, cookies, tokens, or other account data**, and redact screenshots.
+
+An agent reads the code, assesses feasibility, and replies on the issue with a verdict and a plan. Once a maintainer approves, the agent edits the docs or code, runs the tests, and opens a pull request; a human always reviews before merging. Requests to bypass logins, CAPTCHAs, anti-abuse controls, or confirmations will not be accepted. See [docs/agent-workflow.md](docs/agent-workflow.md) (Chinese) for the full workflow and setup.
+
 ## License
 
 [MIT](LICENSE)

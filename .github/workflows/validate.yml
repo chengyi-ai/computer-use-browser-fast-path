@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Agent 用默认 token 建的 PR 不会触发 pull_request，由 Agent Implement 手动补触发。
   workflow_dispatch:
 
 permissions:
@@ -34,3 +35,9 @@ jobs:
 
       - name: Check update CLI
         run: python skills/computer-use-browser-fast-path/scripts/check_update.py --help
+
+      - name: Check feedback tooling
+        run: |
+          python tools/submit_feedback.py --help
+          python .github/scripts/apply_triage.py --help
+          for script in .github/scripts/*.sh; do bash -n "$script"; done
