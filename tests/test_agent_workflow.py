@@ -199,6 +199,11 @@ class OpenAgentPrTests(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertIsNone(pattern.search(path))
 
+    def test_each_check_records_its_own_exit_code(self):
+        for command in ("python scripts/validate_repo.py", "python -m unittest discover -s tests"):
+            with self.subTest(command=command):
+                self.assertIn(f"{command} >> .agent-out/test.log 2>&1 || tests_ok=false", self.SCRIPT)
+
     def test_runs_the_same_checks_as_ci(self):
         validate_yml = (ROOT / ".github/workflows/validate.yml").read_text(encoding="utf-8")
         self.assertIn("workflow_dispatch", validate_yml)
