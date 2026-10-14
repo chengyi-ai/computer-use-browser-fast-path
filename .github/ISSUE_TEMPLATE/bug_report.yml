@@ -1,0 +1,40 @@
+name: 问题反馈 / Bug report
+description: 快速路径在某个浏览器流程里出错、变慢，或更新检查报错
+labels: ["needs-triage", "source:github", "type:bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        提交后 Agent 会自动评估可行性并回复。请尽量提供可复现的信息。
+        **不要贴密码、Cookie、令牌、验证码或个人账号信息**；截图请先打码账号、头像和私信等隐私内容。
+  - type: textarea
+    id: what
+    attributes:
+      label: 发生了什么
+      description: 实际看到的现象，例如复用了失效的 element_index、焦点被其他应用抢走后批量输入落空、剪贴板粘贴错位、滚动了错误的容器、把未完成当成成功、`check_update.py` 报错。附报错原文或（打码后的）截图。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望结果
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      description: 网页流程的大致步骤（站点类型即可，不必给出真实账号）、在哪个状态边界出错，以及你给 Agent 的提示词。
+      placeholder: 使用 $computer-use-browser-fast-path 在 Chrome 中……；第 3 步打开弹窗后……
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Skill 版本
+      description: 安装目录里 `VERSION` 文件的内容，或 `python3 scripts/check_update.py --verbose` 的输出
+  - type: input
+    id: env
+    attributes:
+      label: 运行环境
+      description: 系统（macOS / Windows / Linux）、浏览器及版本、所用 Agent（Codex / Claude Code / 其他）与 Computer Use 运行时
